@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════
+   AUTH PAGES — Mengikuti style PinjamIn Laravel
+   Warna: indigo/biru (#007dff, #1294e4, #20a7db)
+   Font: Figtree (sama dengan blade template)
+═══════════════════════════════════════════════ */
+
+/* Halaman wrapper */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f4fbff 100%);
+  padding: 24px 16px;
+  font-family: 'Figtree', 'Inter', system-ui, sans-serif;
+}
+
+/* Container tengah */
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Logo */
+.auth-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-logo img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.auth-logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  color: #007dff;
+  letter-spacing: -0.03em;
+}
+
+/* Card */
+.auth-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #bdeaff;
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 10px 40px rgba(0, 125, 255, 0.08), 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 24px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Alert */
+.auth-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.auth-alert--success {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: #1294e4;
+  box-shadow: 0 0 0 3px rgba(18, 148, 228, 0.15);
+}
+
+.form-input.is-error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-error {
+  font-size: 13px;
+  color: #dc2626;
+  margin-top: 5px;
+}
+
+/* Password wrapper dengan icon */
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper .form-input {
+  padding-right: 44px;
+}
+
+.input-icon-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px;
+  color: #64748b;
+  transition: color 0.2s;
+}
+
+.input-icon-btn:hover { color: #007dff; }
+
+/* Remember me + Lupa password */
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #4b5563;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-input {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  accent-color: #1294e4;
+  cursor: pointer;
+}
+
+.auth-link {
+  font-size: 13px;
+  color: #1294e4;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.auth-link:hover { color: #007dff; text-decoration: underline; }
+
+/* Tombol utama — sama dengan x-primary-button Laravel */
+.btn-primary {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #1294e4, #007dff);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(0, 125, 255, 0.3);
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #007dff, #0067d0);
+  box-shadow: 0 6px 20px rgba(0, 125, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) { transform: scale(0.98); }
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Spinner animasi */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Kembali link */
+.auth-back-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Footer */
+.auth-footer {
+  font-size: 13px;
+  color: #94a3b8;
+  text-align: center;
+}
