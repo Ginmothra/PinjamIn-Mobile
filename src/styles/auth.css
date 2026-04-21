@@ -145,7 +145,7 @@
   padding-right: 44px;
 }
 
-.input-icon-btn {
+.password-toggle {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -153,14 +153,16 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-  padding: 4px;
-  color: #64748b;
-  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  color: #94a3b8;
+  transition: color 0.2s, transform 0.1s;
 }
 
-.input-icon-btn:hover { color: #007dff; }
+.password-toggle:hover { color: #007dff; }
+.password-toggle:active { transform: translateY(-50%) scale(0.9); }
 
 /* Remember me + Lupa password */
 .auth-row {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { CartProvider } from './contexts/CartContext';
 import { GuestGuard, AuthGuard } from './components/Guards';
 
 // Pages
@@ -10,6 +11,7 @@ import HomePage from './pages/dashboard/HomePage';
 import LoansPage from './pages/dashboard/LoansPage';
 import ReturnsPage from './pages/dashboard/ReturnsPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
+import CartPage from './pages/dashboard/CartPage';
 
 // Layout
 import MainLayout from './components/layout/MainLayout';
@@ -18,7 +20,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
+        <CartProvider>
+          <Routes>
           {/* Redirect root ke dashboard jika login, atau login jika tidak */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
@@ -54,11 +57,13 @@ export default function App() {
             <Route path="loans" element={<LoansPage />} />
             <Route path="returns" element={<ReturnsPage />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="cart" element={<CartPage />} />
           </Route>
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );
