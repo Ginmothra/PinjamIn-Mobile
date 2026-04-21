@@ -66,7 +66,9 @@ function App() {
       </main>
 
       <footer className="muted" style={{ textAlign: 'center', marginTop: '40px', paddingBottom: '40px' }}>
-        &copy; 2026 PinjamIn Mobile. Dibuat dengan ❤️ untuk kemudahan Anda.
+        &copy; 2026 {import.meta.env.VITE_APP_NAME}. v{import.meta.env.VITE_APP_VERSION}
+        <br />
+        Dibuat dengan ❤️ untuk kemudahan Anda.
       </footer>
     </div>
   );
