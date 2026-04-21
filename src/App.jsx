@@ -11,6 +11,7 @@ import HomePage from './pages/dashboard/HomePage';
 import LoansPage from './pages/dashboard/LoansPage';
 import ReturnsPage from './pages/dashboard/ReturnsPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
+import SettingsPage from './pages/dashboard/SettingsPage';
 import CartPage from './pages/dashboard/CartPage';
 
 // Layout
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="loans" element={<LoansPage />} />
             <Route path="returns" element={<ReturnsPage />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="settings" element={<SettingsPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
 

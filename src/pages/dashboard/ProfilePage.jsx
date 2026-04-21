@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [showFines, setShowFines] = useState(false);
   const [finesHistory, setFinesHistory] = useState([]);
   const [loadingFines, setLoadingFines] = useState(false);
@@ -88,7 +90,7 @@ export default function ProfilePage() {
       </div>
 
       <div className="menu-list">
-        <button className="menu-item">
+        <button className="menu-item" onClick={() => navigate('/dashboard/settings')}>
           <span>⚙️</span> Pengaturan Akun
         </button>
         <button className="menu-item logout" onClick={logout}>
