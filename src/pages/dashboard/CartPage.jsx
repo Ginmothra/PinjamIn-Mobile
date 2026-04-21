@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
 
 export default function CartPage() {
@@ -8,6 +8,7 @@ export default function CartPage() {
   const [notes, setNotes] = useState('');
   const [dueDate, setDueDate] = useState(''); // State baru untuk tanggal pengembalian
   const [message, setMessage] = useState(null);
+  const [isBooking, setIsBooking] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -29,7 +30,8 @@ export default function CartPage() {
         body: JSON.stringify({
           items: cart.map(item => ({ id: item.id, quantity: item.quantity })),
           notes: notes,
-          due_date: dueDate // Kirim due_date
+          due_date: dueDate,
+          type: isBooking ? 'booking' : 'loan'
         })
       });
 
@@ -52,10 +54,39 @@ export default function CartPage() {
   return (
     <div className="page-content">
       <header className="page-header">
-        <button className="btn-back" onClick={() => navigate(-1)}>←</button>
         <h1>Keranjang Pinjam</h1>
         <p className="muted">Review barang yang akan Anda pinjam</p>
       </header>
+
+      {cart.length > 0 && (
+        <div className="booking-toggle-card glass-card">
+          <div className="toggle-info">
+            <span className="icon">📅</span>
+            <div>
+              <strong>Booking Alat?</strong>
+              <p className="muted" style={{ fontSize: '10px' }}>Pinjam untuk diambil besok pagi</p>
+            </div>
+          </div>
+          <label className="switch">
+            <input 
+              type="checkbox" 
+              checked={isBooking} 
+              onChange={(e) => setIsBooking(e.target.checked)} 
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
+      )}
+
+      {isBooking && (
+        <div className="booking-alert animate-fade">
+          <span className="icon">📅</span>
+          <div>
+            <strong>Mode Booking Aktif</strong>
+            <p>Peminjaman ini dijadwalkan untuk: <strong>{new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}</strong></p>
+          </div>
+        </div>
+      )}
 
       {message && (
         <div className={`auth-alert ${message.type === 'success' ? 'auth-alert--success' : ''}`}>
