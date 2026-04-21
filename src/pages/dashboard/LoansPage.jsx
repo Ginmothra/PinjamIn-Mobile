@@ -30,9 +30,10 @@ export default function LoansPage() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending': return <span className="badge badge-pending">Menunggu</span>;
-      case 'approved': return <span className="badge badge-success">Disetujui</span>;
+      case 'borrowed': return <span className="badge badge-success">Dipinjam</span>;
       case 'rejected': return <span className="badge badge-danger">Ditolak</span>;
       case 'returned': return <span className="badge badge-info">Dikembalikan</span>;
+      case 'completed': return <span className="badge badge-success">Selesai</span>;
       default: return <span className="badge">{status}</span>;
     }
   };
@@ -76,10 +77,10 @@ export default function LoansPage() {
                   </div>
                 </div>
 
-                {loan.status === 'rejected' && loan.rejection_note && (
+                {loan.status === 'rejected' && loan.reject_reason && (
                   <div className="rejection-box">
                     <strong>Alasan Ditolak:</strong>
-                    <p>{loan.rejection_note}</p>
+                    <p>{loan.reject_reason}</p>
                   </div>
                 )}
               </div>

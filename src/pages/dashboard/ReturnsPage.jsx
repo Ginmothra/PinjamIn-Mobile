@@ -109,7 +109,7 @@ export default function ReturnsPage() {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'pending': return <span className="badge badge-pending">Menunggu Cek</span>;
+      case 'partial': return <span className="badge badge-pending">Menunggu Cek</span>;
       case 'completed': return <span className="badge badge-success">Selesai</span>;
       case 'rejected': return <span className="badge badge-danger">Bermasalah</span>;
       default: return <span className="badge">{status}</span>;
