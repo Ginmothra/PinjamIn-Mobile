@@ -6,11 +6,16 @@ export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartCount } = useCart();
   const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState('');
+  const [dueDate, setDueDate] = useState(''); // State baru untuk tanggal pengembalian
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (cart.length === 0) return;
+    if (!dueDate) {
+      setMessage({ type: 'error', text: 'Silakan pilih tanggal pengembalian.' });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -23,7 +28,8 @@ export default function CartPage() {
         },
         body: JSON.stringify({
           items: cart.map(item => ({ id: item.id, quantity: item.quantity })),
-          notes: notes
+          notes: notes,
+          due_date: dueDate // Kirim due_date
         })
       });
 
@@ -79,14 +85,30 @@ export default function CartPage() {
           </div>
 
           <div className="cart-form glass-card">
-            <label className="form-label">Catatan Peminjaman (Opsional)</label>
-            <textarea 
-              className="form-input" 
-              placeholder="Contoh: Untuk keperluan praktik RPL..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows="3"
-            ></textarea>
+            <h3>Informasi Peminjaman</h3>
+            
+            <div className="form-group" style={{ marginTop: '16px' }}>
+              <label className="form-label">Tanggal Pengembalian</label>
+              <input 
+                type="date" 
+                className="form-input" 
+                value={dueDate}
+                min={new Date().toISOString().split('T')[0]} // Batasi minimal hari ini
+                onChange={(e) => setDueDate(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group" style={{ marginTop: '16px' }}>
+              <label className="form-label">Catatan Tambahan</label>
+              <textarea 
+                className="form-input" 
+                rows="3" 
+                placeholder="Contoh: Digunakan untuk praktik di Lab..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              ></textarea>
+            </div>
           </div>
 
           <button 
