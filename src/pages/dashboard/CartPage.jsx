@@ -64,7 +64,7 @@ export default function CartPage() {
             <span className="icon">📅</span>
             <div>
               <strong>Booking Alat?</strong>
-              <p className="muted" style={{ fontSize: '10px' }}>Pinjam untuk diambil besok pagi</p>
+              <p className="muted">Pinjam untuk diambil besok pagi</p>
             </div>
           </div>
           <label className="switch">
@@ -118,7 +118,7 @@ export default function CartPage() {
           <div className="cart-form glass-card">
             <h3>Informasi Peminjaman</h3>
             
-            <div className="form-group" style={{ marginTop: '16px' }}>
+            <div className="form-group">
               <label className="form-label">Tanggal Pengembalian</label>
               <input 
                 type="date" 
@@ -130,7 +130,7 @@ export default function CartPage() {
               />
             </div>
 
-            <div className="form-group" style={{ marginTop: '16px' }}>
+            <div className="form-group">
               <label className="form-label">Catatan Tambahan</label>
               <textarea 
                 className="form-input" 
