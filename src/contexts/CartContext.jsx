@@ -26,12 +26,7 @@ export const CartProvider = ({ children }) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
-        // If it exists, check stock before incrementing (though we should also check on UI)
-        if (existing.quantity < item.stock) {
-          return prev.map((i) => 
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-          );
-        }
+        // Karena stok cuma 1, jangan tambah quantity jika sudah ada di keranjang
         return prev;
       }
       return [...prev, { ...item, quantity: 1 }];

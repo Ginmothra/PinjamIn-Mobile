@@ -105,9 +105,7 @@ export default function CartPage() {
                 </div>
                 <div className="cart-item-actions">
                   <div className="qty-control">
-                    <button onClick={() => updateQuantity(item.id, -1)} disabled={item.quantity <= 1}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
+                    <span>Jumlah: {item.quantity}</span>
                   </div>
                   <button className="btn-remove" onClick={() => removeFromCart(item.id)}>🗑️</button>
                 </div>

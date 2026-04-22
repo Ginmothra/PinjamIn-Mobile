@@ -808,8 +808,8 @@ input:checked + .slider:before {
   align-items: center;
   background: #f1f5f9;
   border-radius: 12px;
-  padding: 4px;
-  gap: 12px;
+  padding: 6px 12px;
+  gap: 8px;
 }
 
 .qty-control button {
@@ -836,6 +836,7 @@ input:checked + .slider:before {
   font-size: 14px;
   min-width: 15px;
   text-align: center;
+  color: var(--text-slate);
 }
 
 .btn-remove {
