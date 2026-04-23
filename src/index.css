@@ -202,6 +202,7 @@ p.muted {
 
 /* Fine Widget Styles */
 .fine-widget {
+  background: white !important; /* Paksa background putih */
   padding: 16px 20px;
   cursor: pointer;
 }
@@ -275,7 +276,8 @@ p.muted {
 
 .fine-reason {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1e293b; /* Teks Hitam */
   margin-bottom: 2px;
 }
 
@@ -289,8 +291,9 @@ p.muted {
 }
 
 .fine-value {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e293b; /* Teks Hitam */
   margin-bottom: 4px;
 }
 
@@ -517,4 +520,41 @@ input:checked + .slider:before {
 
 .animate-fade-in {
   animation: fadeInScale 0.3s ease-out forwards;
+}
+
+/* Verification Code Box */
+.verification-code-box {
+  background: rgba(99, 102, 241, 0.15);
+  border: 2px dashed var(--accent);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.code-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 12px rgba(129, 140, 248, 0.4);
+}
+
+.code-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
 }

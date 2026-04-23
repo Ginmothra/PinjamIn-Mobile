@@ -34,6 +34,7 @@ export default function LoansPage() {
       case 'rejected': return <span className="badge badge-danger">Ditolak</span>;
       case 'returned': return <span className="badge badge-info">Dikembalikan</span>;
       case 'completed': return <span className="badge badge-success">Selesai</span>;
+      case 'booked': return <span className="badge badge-indigo">Dibooking</span>;
       default: return <span className="badge">{status}</span>;
     }
   };
@@ -76,6 +77,14 @@ export default function LoansPage() {
                     <span className="meta-value">{new Date(loan.due_date).toLocaleDateString('id-ID')}</span>
                   </div>
                 </div>
+
+                {loan.status === 'booked' && loan.verification_code && (
+                  <div className="verification-code-box">
+                    <span className="code-label">KODE BOOKING</span>
+                    <span className="code-value">{loan.verification_code}</span>
+                    <p className="code-hint">Tunjukkan kode ini ke petugas saat mengambil barang</p>
+                  </div>
+                )}
 
                 {loan.status === 'rejected' && loan.reject_reason && (
                   <div className="rejection-box">
