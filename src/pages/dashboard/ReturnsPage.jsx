@@ -13,6 +13,14 @@ export default function ReturnsPage() {
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
+  
+  // State untuk Kamera
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [facingMode, setFacingMode] = useState('environment'); // Default kamera belakang
+  const [stream, setStream] = useState(null);
+  
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -24,25 +32,87 @@ export default function ReturnsPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const headers = {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-        'Accept': 'application/json'
-      };
+      const token = localStorage.getItem('auth_token');
+      const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
 
-      const [loansRes, historyRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_BASE_URL}/returns/active-loans`, { headers }),
-        fetch(`${import.meta.env.VITE_API_BASE_URL}/returns`, { headers })
-      ]);
+      // Ambil daftar barang yang siap dikembalikan
+      const activeRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/returns/active-loans`, { headers });
+      const activeData = await activeRes.json();
+      setActiveLoans(activeData.loans || []);
 
-      const loansData = await loansRes.json();
+      // Ambil riwayat pengembalian
+      const historyRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/returns`, { headers });
       const historyData = await historyRes.json();
-
-      setActiveLoans(loansData.loans || []);
       setReturnHistory(historyData.returns || []);
     } catch (error) {
-      console.error('Error fetching return data:', error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Bersihkan stream saat modal tutup
+  useEffect(() => {
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [stream]);
+
+  const startCamera = async (mode = facingMode) => {
+    try {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: mode }
+      });
+      
+      setStream(newStream);
+      if (videoRef.current) {
+        videoRef.current.srcObject = newStream;
+      }
+      setIsCameraOpen(true);
+    } catch (err) {
+      console.error("Gagal akses kamera:", err);
+      setMessage({ type: 'error', text: 'Gagal mengakses kamera. Pastikan izin diberikan.' });
+    }
+  };
+
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+    setIsCameraOpen(false);
+  };
+
+  const switchCamera = () => {
+    const newMode = facingMode === 'user' ? 'environment' : 'user';
+    setFacingMode(newMode);
+    if (isCameraOpen) {
+      startCamera(newMode);
+    }
+  };
+
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      canvas.toBlob((blob) => {
+        const file = new File([blob], "capture.jpg", { type: "image/jpeg" });
+        setPhoto(file);
+        setPhotoPreview(URL.createObjectURL(blob));
+        stopCamera();
+      }, 'image/jpeg', 0.8);
     }
   };
 
@@ -61,9 +131,11 @@ export default function ReturnsPage() {
     setShowModal(true);
     setPhoto(null);
     setPhotoPreview(null);
+    setIsCameraOpen(false);
   };
 
   const closeReturnModal = () => {
+    stopCamera();
     setShowModal(false);
     setSelectedLoan(null);
     setPhoto(null);
@@ -182,7 +254,7 @@ export default function ReturnsPage() {
             <div className="history-body">
               <p className="return-date">Dikembalikan pada: {new Date(ret.return_date).toLocaleDateString('id-ID')}</p>
               {ret.proof_image && (
-                <div className="proof-preview-small">
+                <div className="proof-preview-small" onClick={() => window.open(`${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${ret.proof_image}`, '_blank')}>
                   <img src={`${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${ret.proof_image}`} alt="Bukti" />
                 </div>
               )}
@@ -201,46 +273,69 @@ export default function ReturnsPage() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-body">
               <h2>Bukti Pengembalian</h2>
-              <p className="muted">Wajib mengunggah foto alat yang dikembalikan untuk bukti fisik.</p>
+              <p className="muted">Wajib mengunggah foto alat yang dikembalikan.</p>
               
-              <form onSubmit={handleReturnSubmit} style={{ marginTop: '20px' }}>
-                <div className="photo-upload-area" onClick={() => fileInputRef.current.click()}>
-                  {photoPreview ? (
-                    <img src={photoPreview} alt="Preview" className="preview-img-full" />
-                  ) : (
-                    <div className="upload-placeholder">
-                      <span style={{ fontSize: '40px' }}>📸</span>
-                      <p>Klik untuk Ambil Foto / Pilih Gambar</p>
+              <div className="camera-container glass-card" style={{ marginTop: '20px', padding: '0', overflow: 'hidden', position: 'relative', aspectRatio: '4/3' }}>
+                {isCameraOpen ? (
+                  <>
+                    <video 
+                      ref={videoRef} 
+                      autoPlay 
+                      playsInline 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div className="camera-overlay">
+                      <button className="btn-capture" onClick={capturePhoto}></button>
+                      <button className="btn-switch-cam" onClick={switchCamera}>🔄</button>
+                      <button className="btn-close-cam" onClick={stopCamera}>✕</button>
                     </div>
-                  )}
-                </div>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={handlePhotoChange} 
-                  accept="image/*" 
-                  style={{ display: 'none' }}
-                  capture="environment"
-                />
+                  </>
+                ) : photoPreview ? (
+                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                    <img src={photoPreview} alt="Preview" className="preview-img-full" />
+                    <button className="btn-retake" onClick={() => startCamera()}>📸 Ambil Ulang</button>
+                  </div>
+                ) : (
+                  <div className="upload-options">
+                    <button className="btn-option" onClick={() => startCamera()}>
+                      <span className="icon">📷</span>
+                      <p>Buka Kamera</p>
+                    </button>
+                    <div className="divider-v"></div>
+                    <button className="btn-option" onClick={() => fileInputRef.current.click()}>
+                      <span className="icon">🖼️</span>
+                      <p>Pilih Galeri</p>
+                    </button>
+                  </div>
+                )}
+              </div>
 
-                <div className="modal-footer" style={{ marginTop: '24px' }}>
-                  <button 
-                    type="submit" 
-                    className="btn-primary" 
-                    disabled={submitting || !photo}
-                  >
-                    {submitting ? 'Mengirim...' : 'Kirim Pengembalian'}
-                  </button>
-                  <button 
-                    type="button" 
-                    className="btn-secondary" 
-                    onClick={closeReturnModal}
-                    style={{ background: '#f1f5f9', color: '#64748b', border: 'none', padding: '12px', borderRadius: '12px', fontWeight: '700' }}
-                  >
-                    Batal
-                  </button>
-                </div>
-              </form>
+              <canvas ref={canvasRef} style={{ display: 'none' }} />
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handlePhotoChange} 
+                accept="image/*" 
+                style={{ display: 'none' }}
+              />
+
+              <div className="modal-footer-stacked" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <button 
+                  className="btn-primary" 
+                  disabled={submitting || !photo}
+                  onClick={handleReturnSubmit}
+                >
+                  {submitting ? 'Mengirim...' : 'Kirim Pengembalian'}
+                </button>
+                <button 
+                  type="button" 
+                  className="btn-text-only" 
+                  onClick={closeReturnModal}
+                  style={{ alignSelf: 'center', fontSize: '14px', color: '#64748b', background: 'none', border: 'none', fontWeight: '600' }}
+                >
+                  Batal
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -248,3 +343,4 @@ export default function ReturnsPage() {
     </div>
   );
 }
+
